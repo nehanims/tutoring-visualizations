@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 const CoinChangeVisualizer = () => {
-  const [coinInput, setCoinInput] = useState('1 2 5');
-  const [coins, setCoins] = useState([1, 2, 5]);
-  const [amount, setAmount] = useState(11);
+  const [coinInput, setCoinInput] = useState('1 2 3 5 8');
+  const [coins, setCoins] = useState([1, 2, 3, 5, 8]);
+  const [amount, setAmount] = useState(15);
   const [dpGrid, setDpGrid] = useState([]);
   const [coinUsage, setCoinUsage] = useState([]);
   const [minCoinsIndex, setMinCoinsIndex] = useState([]);
@@ -33,10 +33,12 @@ const CoinChangeVisualizer = () => {
       if (a === 0) {
         minCoins[a] = 0;
         minCoinsIdx[a] = null;
-
-        continue;
       }
       for (let i = 0; i < coins.length; i++) {
+        if (a === 0) {
+          eachCoinsMin[i][0] = 0;
+          continue;
+        }
         let remainingAmtUsingCoin_i = a - coins[i];
         if (remainingAmtUsingCoin_i >= 0) {
           if (minCoins[remainingAmtUsingCoin_i] + 1 < minCoins[a]) {
@@ -163,7 +165,7 @@ const CoinChangeVisualizer = () => {
                 <td className="border p-2 font-bold bg-yellow-400 text-center w-20">{coins[i]}</td>
                 {row.map((cell, j) => (
                   
-                  <td key={j} className={`border p-2 ${cell === Infinity ? 'bg-red-200' : (j===minCoinsIndex[i]? 'bg-orange-200':'bg-green-200')}`}>
+                  <td key={j} className={`border p-2 ${cell === Infinity ? 'bg-red-200' : (i===minCoinsIndex[j]? 'bg-orange-200':'bg-green-200')}`}>
                     <div className="flex flex-col items-center justify-center h-full">
                       <div className="text-lg font-bold">{cell === Infinity ? '∞' : cell}</div>
                       {showCoinUsage && renderCoinUsage(coinUsage[i][j])}
