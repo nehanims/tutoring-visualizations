@@ -13,20 +13,10 @@ const CoinChangeVisualizer = () => {
 
     //Change the name of minCoins to dp and dp to something else e.g. minForThatRow
     const eachCoinsMin = Array(coins.length).fill().map(() => Array(amount + 1).fill(Infinity));
-
     const eachCoinsMinUsage = Array(coins.length).fill().map(() => Array(amount + 1).fill(null));
-
     const minCoins = Array(amount + 1).fill(Infinity);
     const minCoinsIdx = Array(amount + 1).fill(null);
     const minCoinsUsage = Array(amount + 1).fill(null);
-
-    // Initialize first row
-    /*for (let i = 0; i <= amount; i++) {
-      if (i % coins[0] === 0) {
-        dp[0][i] = Math.floor(i / coins[0]);
-        usage[0][i] = coins.map((_, index) => index === 0 ? dp[0][i] : 0);
-      }
-    }*/
 
     // Fill the dp table
     for (let a = 0; a <= amount; a++) {
@@ -44,38 +34,19 @@ const CoinChangeVisualizer = () => {
           if (minCoins[remainingAmtUsingCoin_i] + 1 < minCoins[a]) {
             minCoins[a] = minCoins[remainingAmtUsingCoin_i] + 1;
             minCoinsIdx[a] = i;
-            
+
           }
           eachCoinsMin[i][a] = minCoins[remainingAmtUsingCoin_i] + 1;
-          //console.log("(minCoinsUsage[remainingAmtUsingCoin_i] || [ ])="+(minCoinsUsage[remainingAmtUsingCoin_i] || [ ]), "coinIndex="+i, "amount="+a ,"remainingAmtUsingCoin_i="+remainingAmtUsingCoin_i);
-          eachCoinsMinUsage[i][a] = [...(minCoinsUsage[remainingAmtUsingCoin_i] || [ ])];
+          eachCoinsMinUsage[i][a] = [...(minCoinsUsage[remainingAmtUsingCoin_i] || [])];
           eachCoinsMinUsage[i][a][i] = (eachCoinsMinUsage[i][a][i] || 0) + 1;
-          //console.log("eachCoinsMinUsage["+i+"]["+a+"]=" + eachCoinsMinUsage[i][a]);
-
         } else {
           eachCoinsMin[i][a] = Infinity;
         }
       }
-      //console.log("min coin index =" + minCoinsIdx[a] + " for amt=" + a);
-      //console.log("eachCoinsMinUsage[minCoinsIdx[a]][a]=" + eachCoinsMinUsage[minCoinsIdx[a]][a]);
-      if (minCoinsIdx[a]!==null)
+
+      if (minCoinsIdx[a] !== null)
         minCoinsUsage[a] = eachCoinsMinUsage[minCoinsIdx[a]][a];
-      //console.log("minCoinsUsage["+a+"]="+minCoinsUsage[a]);
-      /*
-      if (coins[i] > j) {
-        dp[i][j] = dp[i - 1][j];
-        usage[i][j] = usage[i - 1][j];
-      } else {
-        if (dp[i - 1][j] <= 1 + dp[i][j - coins[i]]) {
-          dp[i][j] = dp[i - 1][j];
-          usage[i][j] = usage[i - 1][j];
-        } else {
-          dp[i][j] = 1 + dp[i][j - coins[i]];
-          usage[i][j] = [...(usage[i][j - coins[i]] || [])];
-          usage[i][j][i] = (usage[i][j][i] || 0) + 1;
-        }
-      }
-      */
+
     }
 
     setDpGrid(eachCoinsMin);
@@ -164,8 +135,8 @@ const CoinChangeVisualizer = () => {
               <tr key={i}>
                 <td className="border p-2 font-bold bg-yellow-400 text-center w-20">{coins[i]}</td>
                 {row.map((cell, j) => (
-                  
-                  <td key={j} className={`border p-2 ${cell === Infinity ? 'bg-red-200' : (i===minCoinsIndex[j]? 'bg-orange-200':'bg-green-200')}`}>
+
+                  <td key={j} className={`border p-2 ${cell === Infinity ? 'bg-red-200' : (i === minCoinsIndex[j] ? 'bg-orange-200' : 'bg-green-200')}`}>
                     <div className="flex flex-col items-center justify-center h-full">
                       <div className="text-lg font-bold">{cell === Infinity ? '∞' : cell}</div>
                       {showCoinUsage && renderCoinUsage(coinUsage[i][j])}
@@ -179,7 +150,7 @@ const CoinChangeVisualizer = () => {
       </div>
 
       <div className="mt-4 text-center text-xl font-bold">
-        Minimum coins needed: {dpGrid[coins.length - 1]?.[amount] === Infinity ? 'Not possible' : dpGrid[coins.length - 1]?.[amount]}
+        Minimum coins needed: {dpGrid[minCoinsIndex[amount]]?.[amount] === Infinity ? 'Not possible' : dpGrid[minCoinsIndex[amount]]?.[amount]}
       </div>
     </div>
   );
