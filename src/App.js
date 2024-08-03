@@ -1,13 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
-import CoinChangeVisualizer from './components/coin-change-interactive';
-import CoinChangeVisualizerSetExpansion from './components/coin-change-set-expansion';
+
+import VisualizationTabs from './components/tabs';
+
 
 function App() {
   return (
     <div className="App">
-      <CoinChangeVisualizer />
-      <CoinChangeVisualizerSetExpansion />
+      <VisualizationTabs />
     </div>
   );
 }
